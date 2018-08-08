@@ -79,6 +79,22 @@
   version = "v1.1.0"
 
 [[projects]]
+  digest = "1:235ae01f32fb5f12c5f6d2e0e05ab48e651ab31c126e45a4efc4f510810941ac"
+  name = "github.com/jinzhu/gorm"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
+  version = "v1.9.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:fd97437fbb6b7dce04132cf06775bd258cce305c44add58eb55ca86c6c325160"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
   digest = "1:e30ac47ee84d7d354e0a284cf742e3015400667e90aa3d6ae99c7a55da67c645"
   name = "github.com/kennygrant/sanitize"
   packages = ["."]
@@ -163,6 +179,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/gocolly/colly"]
+  input-imports = [
+    "github.com/gocolly/colly",
+    "github.com/jinzhu/gorm",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
