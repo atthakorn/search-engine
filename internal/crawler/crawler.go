@@ -13,18 +13,18 @@ import (
 
 // Crawler
 type Crawler struct {
-	collector    *colly.Collector
 	sites        []string
+	maxDepth     int
+	parallelism  int
+	collector    *colly.Collector
 	crawledLinks map[string]string
 	mux          *sync.Mutex
 }
 
-
-
 // Check if  link is file
 func (c *Crawler) isFile(link string) bool {
 
-	exts := []string {"pdf", "docx", "jpg", "png", "txt", "xslx", "gif"}
+	exts := []string{"pdf", "docx", "jpg", "png", "txt", "xslx", "gif"}
 
 	for _, ext := range exts {
 		if strings.HasSuffix(strings.ToLower(link), ext) {
@@ -39,7 +39,7 @@ func (c *Crawler) Start() {
 	start := time.Now()
 
 	for _, site := range c.sites {
-		c.collector.Visit(fmt.Sprintf("http://%s",site ))
+		c.collector.Visit(fmt.Sprintf("http://%s", site))
 	}
 
 	c.collector.Wait()
@@ -51,17 +51,35 @@ func (c *Crawler) Start() {
 }
 
 
-func (c *Crawler) bootstrapCallback() {
+func (c *Crawler) init() {
 
+	//mutex lock
+	c.mux = &sync.Mutex{}
+	//memory for keep tracking old link
+	c.crawledLinks = make(map[string]string)
+
+	// Instantiate default collector
+	collector := colly.NewCollector(
+		// Visit only domains:
+		colly.AllowedDomains(c.sites...),
+		colly.Async(true),
+		colly.MaxDepth(c.maxDepth),
+
+	)
+	//disable keep alive
+	collector.WithTransport(&http.Transport{
+		DisableKeepAlives: true,
+	})
+
+	collector.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: c.parallelism})
 
 	// Called after response received
-	c.collector.OnScraped(func(r *colly.Response) {
+	collector.OnScraped(func(r *colly.Response) {
 		fmt.Printf("Scraped: %s\n", r.Request.URL)
 	})
 
-
 	// On every a element which has href attribute call callback
-	c.collector.OnHTML("a[href], area[href]", func(e *colly.HTMLElement) {
+	collector.OnHTML("a[href], area[href]", func(e *colly.HTMLElement) {
 
 		c.mux.Lock()
 		defer c.mux.Unlock()
@@ -71,8 +89,8 @@ func (c *Crawler) bootstrapCallback() {
 		//validate url
 		_, err := url.ParseRequestURI(link)
 		if err == nil && !c.isFile(link) {
-			_, ok  := c.crawledLinks[link]
-			if !ok  {
+			_, ok := c.crawledLinks[link]
+			if !ok {
 				c.crawledLinks[link] = link
 				// Visit link found on page, only those crawledLinks are visited which are in AllowedDomains
 				e.Request.Visit(e.Request.AbsoluteURL(link))
@@ -81,16 +99,15 @@ func (c *Crawler) bootstrapCallback() {
 
 	})
 
-
-
 	// Called if error occured during the request
-	c.collector.OnError(func(r *colly.Response, err error) {
+	collector.OnError(func(r *colly.Response, err error) {
 		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 	})
 
+
+	c.collector = collector
+
 }
-
-
 
 func Make() *Crawler {
 
@@ -98,23 +115,11 @@ func Make() *Crawler {
 	maxDepth := viper.GetInt("maxDepth")
 	parallelism := viper.GetInt("parallelism")
 
-	// Instantiate default collector
-	c := colly.NewCollector(
-		// Visit only domains:
-		colly.AllowedDomains(sites...),
-		colly.Async(true),
-		colly.MaxDepth(maxDepth),
-
-	)
-	//disable keep alive
-	c.WithTransport(&http.Transport{
-		DisableKeepAlives: true,
-	})
-
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism:  parallelism})
-
-	crawler := &Crawler{c, sites, make(map[string]string),  &sync.Mutex{}}
-	crawler.bootstrapCallback()
-	return crawler;
+	crawler := &Crawler{
+		sites:    sites,
+		maxDepth: maxDepth,
+		parallelism: parallelism,
+	}
+	crawler.init()
+	return crawler
 }
-
