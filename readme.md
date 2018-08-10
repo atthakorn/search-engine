@@ -1,6 +1,3 @@
-# Library Dependencies
-- http://gorm.io (orm)
-- https://blevesearch.com (fulltext search)
-- http://go-colly.org  (web crawler)
-- https://github.com/golang-migrate/migrate (migration)
-- https://github.com/pressly/goose (migration)
+# The Experimental Search Engine in Go
+
+This is experimental project to build search engine in Go using fabulous libraries: [bleavesearch](https://github.com/blevesearch/bleve) and [go-colly](https://github.com/gocolly/colly)
