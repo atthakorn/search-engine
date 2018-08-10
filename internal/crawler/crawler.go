@@ -42,6 +42,8 @@ func (c *Crawler) isFileByExtension(link string) bool {
 	return false
 }
 
+
+// Start scraping
 func (c *Crawler) Start() {
 
 	start := time.Now()
@@ -58,6 +60,8 @@ func (c *Crawler) Start() {
 
 }
 
+
+// Crawer initializer
 func (c *Crawler) init() {
 
 	//mutex lock
