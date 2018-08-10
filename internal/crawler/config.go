@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func LoadConfig() {
+func init() {
 
 
 	viper.SetConfigName("config")

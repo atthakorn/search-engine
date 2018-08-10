@@ -83,7 +83,7 @@ func Make() *Crawler {
 		// Visit only domains:
 		colly.AllowedDomains(sites...),
 		colly.Async(true),
-		colly.MaxDepth(10),
+		//colly.MaxDepth(10),
 
 	)
 	//disable keep alive

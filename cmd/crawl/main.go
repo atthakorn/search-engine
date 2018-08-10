@@ -7,13 +7,7 @@ import (
 func main()  {
 
 
-	crawler.LoadConfig()
-
-
-
 	crawler.Make().Start()
-
-
 
 
 }
