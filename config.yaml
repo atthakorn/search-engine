@@ -3,8 +3,12 @@
 sites:
 - www.thaiunion.com
 
+
 # max depth for crawler to follow
 maxDepth: 3
 
 # max worker
-parallelism: 2
+parallelism: 1
+
+# random delay (second)
+delay: 2
