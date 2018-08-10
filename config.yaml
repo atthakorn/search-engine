@@ -1,3 +1,10 @@
 
+# sites to crawl
 sites:
 - www.thaiunion.com
+
+# max depth for crawler to follow
+maxDepth: 3
+
+# max worker
+parallelism: 2
