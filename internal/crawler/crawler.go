@@ -50,6 +50,7 @@ type Crawler struct {
 // Check if  link is file
 func (c *Crawler) isFile(link string) bool {
 
+	//regex test whether url is end with any file extensions
 	match, err :=  regexp.MatchString(`\.\w+($|\?)`, link)
 	if err != nil {
 		return true  //if error, assume it is file
