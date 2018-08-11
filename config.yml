@@ -1,11 +1,12 @@
 
 # sites to crawl
 sites:
-- www.thaiunion.com
+#- www.thaiunion.com
+- www.minor.com
 
 
 # max depth for crawler to follow
-maxDepth: 3
+maxDepth: 5
 
 # max worker
 parallelism: 1

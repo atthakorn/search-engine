@@ -10,6 +10,7 @@ import (
 	"log"
 	"regexp"
 	"sync/atomic"
+	"strings"
 )
 
 //load config
@@ -27,7 +28,6 @@ func init() {
 	}
 
 	log.Printf("Fetch Sites: %v\n", viper.GetStringSlice("sites"))
-
 }
 
 // Crawler
@@ -38,81 +38,6 @@ type Crawler struct {
 	delay       int
 	collector   *colly.Collector
 	total       int64
-}
-
-// Check if  link is file
-func (c *Crawler) isFile(link string) bool {
-
-	//regex test whether url is end with any file extensions
-	match, err := regexp.MatchString(`\.\w+($|\?)`, link)
-	if err != nil {
-		return true //if error, assume it is file
-	}
-	return match
-}
-
-// Start scraping
-func (c *Crawler) Start() {
-
-	start := time.Now()
-
-	//start crawl at entry point
-	for _, site := range c.sites {
-		c.collector.Visit(fmt.Sprintf("http://%s", site))
-	}
-
-	//wait until workers all done
-	c.collector.Wait()
-
-	elapsed := time.Since(start)
-
-	log.Printf("Fetching Complete: %d pages in %s\n", c.total, elapsed)
-
-}
-
-func (c *Crawler) onResponse() colly.ResponseCallback {
-
-	return func(r *colly.Response) {
-
-		r.Ctx.Put("time", time.Now())
-	}
-
-}
-
-func (c *Crawler) onHtml() colly.HTMLCallback {
-
-	return func(e *colly.HTMLElement) {
-
-		link := e.Attr("href")
-		//validate url
-		_, err := url.ParseRequestURI(link)
-
-		if err == nil && !c.isFile(link) {
-
-			e.Request.Visit(e.Request.AbsoluteURL(link))
-		}
-
-	}
-}
-
-func (c *Crawler) onScraped() colly.ScrapedCallback {
-
-	return func(r *colly.Response) {
-
-		atomic.AddInt64(&c.total, 1)
-		elapsed := time.Since(r.Ctx.GetAny("time").(time.Time))
-
-		log.Printf("Scraped: %s (%s)\n", r.Request.URL, elapsed)
-	}
-}
-
-func (c *Crawler) onError() colly.ErrorCallback {
-
-	return func(r *colly.Response, e error) {
-
-		log.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", e)
-
-	}
 }
 
 func Make() *Crawler {
@@ -165,4 +90,91 @@ func (c *Crawler) init() {
 
 	c.collector = collector
 
+}
+
+// Check if  link is file
+func (c *Crawler) isBlacklist(link string) bool {
+
+	// whitelist
+	for _, ext := range []string{".php", ".jsp", ".asp", ".aspx", "html", "htm"} {
+
+		if strings.HasSuffix(strings.ToLower(link), ext) {
+			return false
+		}
+	}
+
+	//regex test whether url is end with any file extensions
+	match, err := regexp.MatchString(`\.\w+($|\?)`, link)
+	if err != nil {
+		return true //if error, assume it is file
+	}
+
+	return match
+}
+
+// Start scraping
+func (c *Crawler) Start() {
+
+	start := time.Now()
+
+	//reset count to zero
+	c.total = 0
+	//start crawl at entry point
+	for _, site := range c.sites {
+		c.collector.Visit(fmt.Sprintf("http://%s", site))
+	}
+
+	//wait until workers all done
+	c.collector.Wait()
+
+	elapsed := time.Since(start)
+
+	log.Printf("Fetching Complete: %d pages in %s\n", c.total, elapsed)
+
+}
+
+func (c *Crawler) onResponse() colly.ResponseCallback {
+
+	return func(r *colly.Response) {
+
+		r.Ctx.Put("time", time.Now())
+	}
+
+}
+
+func (c *Crawler) onHtml() colly.HTMLCallback {
+
+	return func(e *colly.HTMLElement) {
+
+		link :=  e.Request.AbsoluteURL( e.Attr("href"))
+
+		//validate url
+		_, err := url.ParseRequestURI(link)
+
+		if err == nil && !c.isBlacklist(link) {
+
+			e.Request.Visit(link)
+		}
+	}
+}
+
+func (c *Crawler) onScraped() colly.ScrapedCallback {
+
+	return func(r *colly.Response) {
+
+		atomic.AddInt64(&c.total, 1)
+
+		elapsed := time.Since(r.Ctx.GetAny("time").(time.Time))
+
+		log.Printf("Scraped: %s (%s)\n", r.Request.URL, elapsed)
+	}
+}
+
+func (c *Crawler) onError() colly.ErrorCallback {
+
+	return func(r *colly.Response, e error) {
+
+		log.Printf("Request Failed: %s (%s)\n", r.Request.URL, e)
+
+	}
 }

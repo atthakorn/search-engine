@@ -27,8 +27,35 @@ func TestValidatePageUrl(t *testing.T) {
 	crawer := Make()
 
 	url := "http://www.domain.com/en"
-	assert.True(t, !crawer.isFile(url), "This should be valid website url")
+	assert.True(t, !crawer.isBlacklist(url), "This should be valid website url")
+
+
+	php := "http://www.domain.com/en.php"
+	assert.True(t, !crawer.isBlacklist(php), "This should be valid website url (.php)")
+
+	asp := "http://www.domain.com/en.asp"
+	assert.True(t, !crawer.isBlacklist(asp), "This should be valid website url (.asp)")
+
+
+	aspx := "http://www.domain.com/en.aspx"
+	assert.True(t, !crawer.isBlacklist(aspx), "This should be valid website url (.aspx)")
+
+	jsp := "http://www.domain.com/en.jsp"
+	assert.True(t, !crawer.isBlacklist(jsp), "This should be valid website url (.jsp)")
+
+
+	html := "http://www.domain.com/en.html"
+	assert.True(t, !crawer.isBlacklist(html), "This should be valid website url (.html)")
+
+
+	htm := "http://www.domain.com/en.jsp"
+	assert.True(t, !crawer.isBlacklist(htm), "This should be valid website url (.htm)")
+
+
+
 }
+
+
 
 
 
@@ -37,12 +64,12 @@ func TestValidateFileUrl(t *testing.T) {
 	crawer := Make()
 
 	url := "http://www.domain.com/file.pdf"
-	assert.True(t, crawer.isFile(url), "This should be url endpoint point to file")
+	assert.True(t, crawer.isBlacklist(url), "This should be url endpoint point to file")
 
 
 
 	url = "http://www.domain.com/file.docx"
-	assert.True(t, crawer.isFile(url), "This should be url endpoint point to file")
+	assert.True(t, crawer.isBlacklist(url), "This should be url endpoint point to file")
 
 }
 
