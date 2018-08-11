@@ -174,7 +174,7 @@ func (c *Crawler) onError() colly.ErrorCallback {
 
 	return func(r *colly.Response, e error) {
 
-		log.Printf("Request Failed: %s (%s)\n", r.Request.URL, e)
+		log.Printf("Error: %s (%s)\n", r.Request.URL, e)
 
 	}
 }
