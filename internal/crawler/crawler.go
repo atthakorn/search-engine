@@ -9,7 +9,30 @@ import (
 	"time"
 	"net/url"
 	"strings"
+	"log"
 )
+
+
+
+func init() {
+
+
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	// if in project root
+	viper.AddConfigPath(".")
+	// if you are in cmd/crawler or internal/crawler
+	viper.AddConfigPath("../..")
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file, %s", err)
+	}
+
+	log.Printf("Fetch Sites: %v\n", viper.GetStringSlice("sites"))
+
+
+}
+
 
 // Crawler
 type Crawler struct {
@@ -22,6 +45,8 @@ type Crawler struct {
 	mux          *sync.Mutex
 	total        int
 }
+
+
 
 // Check if  link is file
 func (c *Crawler) isFileByContentType(contentType string) bool {
@@ -55,7 +80,7 @@ func (c *Crawler) Start() {
 
 	elapsed := time.Since(start)
 
-	fmt.Printf("Fetching Complete: %d pages in %s\n", c.total, elapsed)
+	log.Printf("Fetching Complete: %d pages in %s\n", c.total, elapsed)
 
 }
 
@@ -93,7 +118,7 @@ func (c *Crawler) onScraped() colly.ScrapedCallback {
 
 	return func(r *colly.Response) {
 		c.total++
-		fmt.Printf("Scraped: %s\n", r.Request.URL)
+		log.Printf("Scraped: %s\n", r.Request.URL)
 	}
 }
 
@@ -101,7 +126,7 @@ func (c *Crawler) onError() colly.ErrorCallback {
 
 	return func(r *colly.Response, e error) {
 
-		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", e)
+		log.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", e)
 
 	}
 }

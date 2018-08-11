@@ -3,8 +3,8 @@ package crawler
 import (
 	"testing"
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 )
-
 
 func TestLoadConfig(t *testing.T) {
 
@@ -13,17 +13,10 @@ func TestLoadConfig(t *testing.T) {
 	parallelism := viper.GetInt("parallelism")
 	delay := viper.GetInt("delay")
 
-	if len(sites) == 0 {
-		t.Errorf("sites must contain at least one element")
-	}
-	if maxDepth == 0 {
-		t.Errorf("maxDepth must be greater than zero")
-	}
-	if parallelism == 0 {
-		t.Errorf("parallelism must be greater than zero")
-	}
-	if delay == 0 {
-		t.Errorf("delay  must be greater than zero")
-	}
+
+	assert.True(t, len(sites) > 0, "Should be greater than zero")
+	assert.True(t, maxDepth > 0, "should be greater than zero")
+	assert.True(t, parallelism > 0, "Should be greater than zero")
+	assert.True(t, delay > 0, "Should be greater than zero")
 
 }
