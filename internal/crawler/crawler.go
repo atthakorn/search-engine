@@ -1,16 +1,17 @@
 package crawler
 
 import (
-	"github.com/gocolly/colly"
 	"fmt"
-	"net/http"
-	"github.com/spf13/viper"
-	"time"
-	"net/url"
 	"log"
+	"net/http"
+	"net/url"
 	"regexp"
-	"sync/atomic"
 	"strings"
+	"sync/atomic"
+	"time"
+
+	"github.com/gocolly/colly"
+	"github.com/spf13/viper"
 )
 
 //load config
@@ -66,7 +67,6 @@ func (c *Crawler) init() {
 		colly.AllowedDomains(c.sites...),
 		colly.Async(true),
 		colly.MaxDepth(c.maxDepth),
-
 	)
 
 	//disable keep alive
@@ -146,7 +146,7 @@ func (c *Crawler) onHtml() colly.HTMLCallback {
 
 	return func(e *colly.HTMLElement) {
 
-		link :=  e.Request.AbsoluteURL( e.Attr("href"))
+		link := e.Request.AbsoluteURL(e.Attr("href"))
 
 		//validate url
 		_, err := url.ParseRequestURI(link)
