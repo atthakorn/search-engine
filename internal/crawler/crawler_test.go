@@ -20,3 +20,29 @@ func TestLoadConfig(t *testing.T) {
 	assert.True(t, delay > 0, "Should be greater than zero")
 
 }
+
+
+func TestValidatePageUrl(t *testing.T) {
+
+	crawer := Make()
+
+	url := "http://www.domain.com/en"
+	assert.True(t, !crawer.isFile(url), "This should be valid website url")
+}
+
+
+
+func TestValidateFileUrl(t *testing.T) {
+
+	crawer := Make()
+
+	url := "http://www.domain.com/file.pdf"
+	assert.True(t, crawer.isFile(url), "This should be url endpoint point to file")
+
+
+
+	url = "http://www.domain.com/file.docx"
+	assert.True(t, crawer.isFile(url), "This should be url endpoint point to file")
+
+}
+

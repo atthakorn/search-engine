@@ -8,12 +8,12 @@ import (
 	"github.com/spf13/viper"
 	"time"
 	"net/url"
-	"strings"
 	"log"
+	"regexp"
 )
 
 
-
+//load config
 func init() {
 
 
@@ -41,7 +41,6 @@ type Crawler struct {
 	parallelism  int
 	delay        int
 	collector    *colly.Collector
-	crawledLinks map[string]string
 	mux          *sync.Mutex
 	total        int
 }
@@ -49,23 +48,15 @@ type Crawler struct {
 
 
 // Check if  link is file
-func (c *Crawler) isFileByContentType(contentType string) bool {
+func (c *Crawler) isFile(link string) bool {
 
-	return !strings.Contains(contentType, "text/html")
-}
-
-// some pdf file has content type = text/html so double check file extension
-func (c *Crawler) isFileByExtension(link string) bool {
-
-	exts := []string{"pdf", "docx", "jpg", "png", "txt", "xslx", "gif"}
-
-	for _, ext := range exts {
-		if strings.HasSuffix(strings.ToLower(link), ext) {
-			return true
-		}
+	match, err :=  regexp.MatchString(`\.\w+($|\?)`, link)
+	if err != nil {
+		return true  //if error, assume it is file
 	}
-	return false
+	return match
 }
+
 
 // Start scraping
 func (c *Crawler) Start() {
@@ -85,29 +76,29 @@ func (c *Crawler) Start() {
 }
 
 
+
+
+func (c *Crawler) onResponse() colly.ResponseCallback {
+
+	return  func(r *colly.Response) {
+
+		r.Ctx.Put("time", time.Now())
+	}
+
+}
+
+
 func (c *Crawler) onHtml() colly.HTMLCallback {
 
 	return func(e *colly.HTMLElement) {
-
-		c.mux.Lock()
-		defer c.mux.Unlock()
-
-		contentType := e.Response.Headers.Get("Content-Type")
 
 		link := e.Attr("href")
 		//validate url
 		_, err := url.ParseRequestURI(link)
 
-		if err == nil && !(c.isFileByContentType(contentType) || c.isFileByExtension(link)) {
+		if err == nil &&  !c.isFile(link) {
 
-			_, ok := c.crawledLinks[link]
-
-			if !ok {
-
-				c.crawledLinks[link] = link
-				// Visit link found on page, only those crawledLinks are visited which are in AllowedDomains
-				e.Request.Visit(e.Request.AbsoluteURL(link))
-			}
+			e.Request.Visit(e.Request.AbsoluteURL(link))
 		}
 
 	}
@@ -117,8 +108,11 @@ func (c *Crawler) onHtml() colly.HTMLCallback {
 func (c *Crawler) onScraped() colly.ScrapedCallback {
 
 	return func(r *colly.Response) {
+
 		c.total++
-		log.Printf("Scraped: %s\n", r.Request.URL)
+		elapsed := time.Since(r.Ctx.GetAny("time").(time.Time))
+
+		log.Printf("Scraped: %s (%s)\n", r.Request.URL, elapsed)
 	}
 }
 
@@ -132,6 +126,7 @@ func (c *Crawler) onError() colly.ErrorCallback {
 }
 
 func Make() *Crawler {
+
 
 	sites := viper.GetStringSlice("sites")
 	maxDepth := viper.GetInt("maxDepth")
@@ -155,8 +150,7 @@ func (c *Crawler) init() {
 
 	//mutex lock
 	c.mux = &sync.Mutex{}
-	//memory for keep tracking old link
-	c.crawledLinks = make(map[string]string)
+
 
 	//total page scraped
 	c.total = 0
@@ -169,14 +163,19 @@ func (c *Crawler) init() {
 		colly.MaxDepth(c.maxDepth),
 
 	)
+
 	//disable keep alive
 	collector.WithTransport(&http.Transport{
 		DisableKeepAlives: true,
 	})
 
+
 	collector.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: c.parallelism})
 
 	// Called after response received
+	collector.OnResponse(c.onResponse())
+
+	// Called after page scraped
 	collector.OnScraped(c.onScraped())
 
 	// On every a element which has href attribute call callback
