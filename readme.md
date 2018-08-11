@@ -1,4 +1,6 @@
-# Search Engine in Go
+# Search Engine in Go 
+
+[![Build Status](https://travis-ci.com/atthakorn/search-engine.svg?branch=master)](https://travis-ci.com/atthakorn/search-engine)
 
 This is experimental project to build search engine in `Go` 
 
