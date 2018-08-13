@@ -1,7 +1,6 @@
 package crawler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -28,12 +27,12 @@ func init() {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	log.Printf("Fetch Sites: %v\n", viper.GetStringSlice("sites"))
+
 }
 
 // Crawler
 type Crawler struct {
-	sites       []string
+	entryPoints []string
 	maxDepth    int
 	parallelism int
 	delay       int
@@ -43,13 +42,14 @@ type Crawler struct {
 
 func Make() *Crawler {
 
-	sites := viper.GetStringSlice("sites")
+	entryPoints := viper.GetStringSlice("entryPoint")
 	maxDepth := viper.GetInt("maxDepth")
 	parallelism := viper.GetInt("parallelism")
 	delay := viper.GetInt("delay")
 
+
 	crawler := &Crawler{
-		sites:       sites,
+		entryPoints: entryPoints,
 		maxDepth:    maxDepth,
 		parallelism: parallelism,
 		delay:       delay,
@@ -61,10 +61,24 @@ func Make() *Crawler {
 // Crawer initializer
 func (c *Crawler) init() {
 
+	var domains []string
+
+	for _, entryPoint := range c.entryPoints {
+		u, err := url.Parse(entryPoint)
+		if err != nil {
+			log.Printf("Fail to load entry points")
+		}
+
+		domains = append(domains, u.Hostname())
+
+	}
+	log.Printf("Fetch Sites: %v\n", domains)
+
+
 	// Instantiate default collector
 	collector := colly.NewCollector(
 		// Visit only domains:
-		colly.AllowedDomains(c.sites...),
+		colly.AllowedDomains(domains...),
 		colly.Async(true),
 		colly.MaxDepth(c.maxDepth),
 	)
@@ -79,11 +93,14 @@ func (c *Crawler) init() {
 	// Called after response received
 	collector.OnResponse(c.onResponse())
 
+	// Find next link
+	collector.OnHTML("a[href], area[href]", c.onNext())
+
+	// Scraping html
+	collector.OnHTML("html", c.onScraping())
+
 	// Called after page scraped
 	collector.OnScraped(c.onScraped())
-
-	// On every a element which has href attribute call callback
-	collector.OnHTML("a[href], area[href]", c.onHtml())
 
 	// Called if error occured during the request
 	collector.OnError(c.onError())
@@ -120,8 +137,8 @@ func (c *Crawler) Start() {
 	//reset count to zero
 	c.total = 0
 	//start crawl at entry point
-	for _, site := range c.sites {
-		c.collector.Visit(fmt.Sprintf("http://%s", site))
+	for _, entryPoint := range c.entryPoints {
+		c.collector.Visit(entryPoint)
 	}
 
 	//wait until workers all done
@@ -142,7 +159,27 @@ func (c *Crawler) onResponse() colly.ResponseCallback {
 
 }
 
-func (c *Crawler) onHtml() colly.HTMLCallback {
+func (c *Crawler) onScraping() colly.HTMLCallback {
+
+	return func(e *colly.HTMLElement) {
+
+		/*data := &Data{
+			Title: e.DOM.Find("Title").Text(),
+			URL: e.Request.URL.String(),
+			Body: html2text(e),
+		}*/
+
+		//fmt.Println(html2text(e))
+		writeLine(html2text(e))
+
+		//	filename := strings.Replace(e.Request.URL.Path, "/", "_", -1)
+
+		//save(filename, data)
+
+	}
+}
+
+func (c *Crawler) onNext() colly.HTMLCallback {
 
 	return func(e *colly.HTMLElement) {
 
