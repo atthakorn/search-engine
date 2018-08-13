@@ -3,18 +3,14 @@ package crawler
 import (
 	"encoding/json"
 	"log"
-	"github.com/gocolly/colly"
-	"os"
-	"fmt"
 )
 
 type Data struct {
 
 	Title string
 	URL string
-	Parse []string
+	Phrase []string
 }
-
 
 
 func (d *Data) ToJson() string {
@@ -29,49 +25,24 @@ func (d *Data) ToJson() string {
 }
 
 
-func save(filename string, d *Data) {
 
-	filename = fmt.Sprintf("./data/%s.json", filename)
-
-	f, err := os.Create(filename)
+func ParseJsonArray(s string, datas *[]Data) error {
+	err := json.Unmarshal([]byte(s), datas)
 	if err != nil {
-		//os.Create("./data/crawl.json")
-		panic(err)
+		return err
 	}
-	defer f.Close()
-
-	if _, err = f.WriteString(d.ToJson()); err != nil {
-		panic(err)
-	}
-}
-
-func writeLine( s string) {
-
-
-	f, err := os.Create("./data/test.txt")
-	if err != nil {
-		//os.Create("./data/crawl.json")
-		panic(err)
-	}
-	defer f.Close()
-
-	if _, err = f.WriteString(s); err != nil {
-		panic(err)
-	}
+	return nil
 }
 
 
-func html2text(html *colly.HTMLElement) string {
+func ToJsonArray(data []Data) string {
 
-	//remove script
-	html.DOM.Find("script").Remove()
+	b, err := json.Marshal(data)
 
-	//remove style
-	html.DOM.Find("style").Remove()
+	if err != nil {
+		log.Printf("Unable to convert %v to json", data)
+		return ""
+	}
 
-//	text := sanitizer.Sanitize(html.DOM.Text())
-
-
-	return html.DOM.Text()
-
+	return string(b)
 }

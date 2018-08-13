@@ -1,17 +1,16 @@
 
 # sites to crawl
 entryPoint:
-#- www.thaiunion.com
-#- www.minor.com
-#- www.indoramaventures.com
-- http://www.indoramaventures.com/th/our-products/packaging
+- http://www.thaiunion.com
+- http://www.minor.com
+- http://www.indoramaventures.com
 
 
 # max depth for crawler to follow
-maxDepth: 1
+maxDepth: 3
 
 # max worker
-parallelism: 1
+parallelism: 2
 
 # random delay (second)
 delay: 2

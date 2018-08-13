@@ -11,6 +11,8 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/spf13/viper"
+	"sync"
+	"fmt"
 )
 
 //load config
@@ -163,18 +165,27 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 
 	return func(e *colly.HTMLElement) {
 
-		/*data := &Data{
+		//construct data
+		data := &Data{
 			Title: e.DOM.Find("Title").Text(),
 			URL: e.Request.URL.String(),
-			Body: html2text(e),
-		}*/
+			Phrase: ParseHtmlArray(e),
+		}
 
-		//fmt.Println(html2text(e))
-		writeLine(html2text(e))
+		//mutual lock for mutithread
+		var mutex = &sync.Mutex{}
+		mutex.Lock()
+		defer mutex.Unlock()
 
-		//	filename := strings.Replace(e.Request.URL.Path, "/", "_", -1)
+		var datas []Data
+		filename := fmt.Sprintf("./data/%s.json",e.Request.URL.Hostname())
+		jsonString, err := LoadString(filename)
+		if err == nil {
+			ParseJsonArray(jsonString, &datas)
+		}
+		datas = append(datas, *data)
 
-		//save(filename, data)
+		WriteString(filename, ToJsonArray(datas))
 
 	}
 }
