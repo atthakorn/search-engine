@@ -21,13 +21,13 @@ func LoadString(filename string) (string, error) {
 
 // WriteString writes string to file
 func WriteString(filename string, content string) error {
-
-	var err error
-	if f, err := os.Create(filename); err == nil {
+	if f, err := os.Create(filename); err != nil {
+		return err
+	} else {
 		defer f.Close()
 		f.WriteString(content)
+		return nil
 	}
-	return err
 }
 
 
