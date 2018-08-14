@@ -166,29 +166,32 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 
 	return func(e *colly.HTMLElement) {
 
-		//construct data
-		data := &Data{
-			Title: e.DOM.Find("Title").Text(),
-			URL:   e.Request.URL.String(),
-			Texts: ParseTexts(e.DOM),
+		//parse text only if response is OK
+		if e.Response.StatusCode == http.StatusOK {
+			//construct data
+			data := &Data{
+				Title: e.DOM.Find("Title").Text(),
+				URL:   e.Request.URL.String(),
+				Texts: ParseTexts(e.DOM),
+			}
+
+			//mutual lock for mutithread
+			var mutex = &sync.Mutex{}
+			mutex.Lock()
+			defer mutex.Unlock()
+
+
+			var datas []Data
+
+			filename := GetDataPath(e.Request.URL.Hostname())
+			jsonString, err := LoadString(filename)
+			if err == nil {
+				Unmarshall(jsonString, &datas)
+			}
+			datas = append(datas, *data)
+
+			WriteString(filename, Marshall(datas))
 		}
-
-		//mutual lock for mutithread
-		var mutex = &sync.Mutex{}
-		mutex.Lock()
-		defer mutex.Unlock()
-
-
-		var datas []Data
-
-		filename := GetDataPath(e.Request.URL.Hostname())
-		jsonString, err := LoadString(filename)
-		if err == nil {
-			Unmarshall(jsonString, &datas)
-		}
-		datas = append(datas, *data)
-
-		WriteString(filename, Marshall(datas))
 
 	}
 }
