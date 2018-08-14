@@ -168,8 +168,8 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 		//construct data
 		data := &Data{
 			Title: e.DOM.Find("Title").Text(),
-			URL: e.Request.URL.String(),
-			Phrase: ParseHtmlArray(e),
+			URL:   e.Request.URL.String(),
+			Texts: ParseTexts(e.DOM),
 		}
 
 		//mutual lock for mutithread
@@ -177,15 +177,16 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 		mutex.Lock()
 		defer mutex.Unlock()
 
+
 		var datas []Data
 		filename := fmt.Sprintf("./data/%s.json",e.Request.URL.Hostname())
 		jsonString, err := LoadString(filename)
 		if err == nil {
-			ParseJsonArray(jsonString, &datas)
+			Unmarshall(jsonString, &datas)
 		}
 		datas = append(datas, *data)
 
-		WriteString(filename, ToJsonArray(datas))
+		WriteString(filename, Marshall(datas))
 
 	}
 }
@@ -202,6 +203,7 @@ func (c *Crawler) onNext() colly.HTMLCallback {
 		if err == nil && !c.isBlacklist(link) {
 
 			e.Request.Visit(link)
+
 		}
 	}
 }
@@ -217,6 +219,7 @@ func (c *Crawler) onScraped() colly.ScrapedCallback {
 		log.Printf("Scraped: %s (%s)\n", r.Request.URL, elapsed)
 	}
 }
+
 
 func (c *Crawler) onError() colly.ErrorCallback {
 

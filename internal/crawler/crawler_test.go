@@ -8,13 +8,13 @@ import (
 
 func TestLoadConfig(t *testing.T) {
 
-	sites := viper.GetStringSlice("sites")
+	entryPoint := viper.GetStringSlice("entryPoint")
 	maxDepth := viper.GetInt("maxDepth")
 	parallelism := viper.GetInt("parallelism")
 	delay := viper.GetInt("delay")
 
 
-	assert.True(t, len(sites) > 0, "Should be greater than zero")
+	assert.True(t, len(entryPoint) > 0, "Should be greater than zero")
 	assert.True(t, maxDepth > 0, "should be greater than zero")
 	assert.True(t, parallelism > 0, "Should be greater than zero")
 	assert.True(t, delay > 0, "Should be greater than zero")
@@ -70,13 +70,6 @@ func TestValidateFileUrl(t *testing.T) {
 
 	url = "http://www.domain.com/file.docx"
 	assert.True(t, crawer.isBlacklist(url), "This should be url endpoint point to file")
-
-}
-
-
-func TestToJson(t *testing.T) {
-
-
 
 }
 
