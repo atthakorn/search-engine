@@ -14,3 +14,6 @@ parallelism: 2
 
 # random delay (second)
 delay: 2
+
+# path to store data
+dataPath: "./data"

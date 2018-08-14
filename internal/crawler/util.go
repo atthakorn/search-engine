@@ -6,6 +6,9 @@ import (
 	"fmt"
 )
 
+
+
+
 // LoadString loads json string from file
 func LoadString(filename string) (string, error) {
 
