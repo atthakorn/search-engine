@@ -130,36 +130,12 @@
   version = "v1.8.0"
 
 [[projects]]
-  digest = "1:e2d1d410fb367567c2b53ed9e2d719d3c1f0891397bb2fa49afd747cfbf1e8e4"
-  name = "github.com/mattn/go-runewidth"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "9e777a8366cce605130a531d2cd6363d07ad7317"
-  version = "v0.0.2"
-
-[[projects]]
-  digest = "1:a1f5a38c6c82d8f1e8a7b9fb9ea8b125b17188cdfb38f2cd08055ff9b51f5ec4"
-  name = "github.com/microcosm-cc/bluemonday"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "dafebb5b6ff2861a0d69af64991e10866c19be85"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
   digest = "1:5ab79470a1d0fb19b041a624415612f8236b3c06070161a910562f2b2d064355"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   pruneopts = "UT"
   revision = "f15292f7a699fcc1a38a80977f80a046874ba8ac"
-
-[[projects]]
-  branch = "master"
-  digest = "1:4daa045e1e1f3e23f4b07db6880cdf9f259dab65312dfe244a878e6070faaf77"
-  name = "github.com/olekukonko/tablewriter"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "d4647c9c7a84d847478d890b816b7d8b62b0b279"
 
 [[projects]]
   digest = "1:95741de3af260a92cc5c7f3f3061e85273f5a81b5db20d4bd68da74bd521675e"
@@ -227,14 +203,6 @@
   pruneopts = "UT"
   revision = "907c19d40d9a6c9bb55f040ff4ae45271a4754b9"
   version = "v1.1.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:362b269942e8508aed33025593090ad4cdbd9077de4b1cd505e6124728e9e856"
-  name = "github.com/ssor/bom"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "6386211fdfcf24c0bfbdaceafd02849ed9a8a509"
 
 [[projects]]
   digest = "1:18752d0b95816a1b777505a97f71c7467a8445b8ffb55631a7bf779f6ba4fa83"
@@ -329,23 +297,14 @@
   revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
   version = "v2.2.1"
 
-[[projects]]
-  branch = "master"
-  digest = "1:8bacc2118e6cc6a207eb144656537ff7ee0397f8bc8c1f7639519b0de2bb949a"
-  name = "jaytaylor.com/html2text"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "57d518f124b0cf46ea2021f25a01396b3522e6fb"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/PuerkitoBio/goquery",
     "github.com/gocolly/colly",
-    "github.com/microcosm-cc/bluemonday",
     "github.com/spf13/viper",
     "github.com/stretchr/testify/assert",
-    "jaytaylor.com/html2text",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
