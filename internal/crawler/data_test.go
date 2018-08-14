@@ -30,7 +30,7 @@ func TestMarshall(t *testing.T) {
 func TestParseText(t *testing.T) {
 	html := `<html lang="en">
 				<head>
-					<link rel="stylesheet" href="https://creative.21impact.com/intropage/assets/css/queen.css">    
+					<link rel="stylesheet" href="https://domain.com/asset.css">    
 				<style>
     			body{
       				min-height: 100vh;
@@ -39,7 +39,7 @@ func TestParseText(t *testing.T) {
   			</head>
   				<body class="body--12">
 			    	test
-					<script src="https://creative.21impact.com/intropage/assets/js/utility.js"></script>
+					<script src="https://domain.com/asset.js"></script>
   				</body>
 			</html>`
 
