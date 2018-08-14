@@ -169,11 +169,11 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 			filename := GetDataPath(e.Request.URL.Hostname())
 			jsonString, err := LoadString(filename)
 			if err == nil {
-				Unmarshall(jsonString, &datas)
+				Unmarshal(jsonString, &datas)
 			}
 			datas = append(datas, *data)
 
-			WriteString(filename, Marshall(datas))
+			WriteString(filename, Marshal(datas))
 		}
 
 	}

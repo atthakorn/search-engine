@@ -17,7 +17,7 @@ type Data struct {
 
 
 
-func Marshall(data []Data) string {
+func Marshal(data []Data) string {
 
 	b, err := json.Marshal(data)
 
@@ -30,7 +30,7 @@ func Marshall(data []Data) string {
 }
 
 
-func Unmarshall(s string, datas *[]Data) error {
+func Unmarshal(s string, datas *[]Data) error {
 	err := json.Unmarshal([]byte(s), datas)
 	if err != nil {
 		return err
