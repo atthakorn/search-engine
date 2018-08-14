@@ -1,6 +1,6 @@
 # Search Engine in Go 
 
-[![Build Status](https://travis-ci.com/atthakorn/search-engine.svg?branch=master)](https://travis-ci.com/atthakorn/search-engine)
+[![Build Status](https://travis-ci.com/atthakorn/search-engine.svg?branch=master)](https://travis-ci.com/atthakorn/search-engine) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This is experimental project to build search engine in `Go` 
 
