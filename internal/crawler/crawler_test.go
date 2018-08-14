@@ -61,15 +61,15 @@ func TestValidatePageUrl(t *testing.T) {
 
 func TestValidateFileUrl(t *testing.T) {
 
-	crawer := Make()
+	crawler := Make()
 
 	url := "http://www.domain.com/file.pdf"
-	assert.True(t, crawer.isBlacklist(url), "This should be url endpoint point to file")
+	assert.True(t, crawler.isBlacklist(url), "This should be url endpoint point to file")
 
 
 
 	url = "http://www.domain.com/file.docx"
-	assert.True(t, crawer.isBlacklist(url), "This should be url endpoint point to file")
+	assert.True(t, crawler.isBlacklist(url), "This should be url endpoint point to file")
 
 }
 

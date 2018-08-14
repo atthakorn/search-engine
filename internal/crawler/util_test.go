@@ -35,3 +35,13 @@ func TestReadWriteString(t *testing.T) {
 	os.Remove(file)
 
 }
+
+
+func TestReadFileNotFound(t *testing.T) {
+
+	_, err := LoadString("www.domain.com")
+
+	assert.NotNil(t,err)
+
+
+}

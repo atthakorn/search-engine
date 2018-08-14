@@ -20,17 +20,14 @@ func LoadString(filename string) (string, error) {
 }
 
 // WriteString writes string to file
-func WriteString(filename string, content string) {
+func WriteString(filename string, content string) error {
 
-	f, err := os.Create(filename)
-	if err != nil {
-		panic(err)
+	var err error
+	if f, err := os.Create(filename); err == nil {
+		defer f.Close()
+		f.WriteString(content)
 	}
-	defer f.Close()
-
-	if _, err = f.WriteString(content); err != nil {
-		panic(err)
-	}
+	return err
 }
 
 
