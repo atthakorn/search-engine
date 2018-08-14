@@ -3,8 +3,8 @@ package crawler
 import (
 	"os"
 	"io/ioutil"
+	"fmt"
 )
-
 
 // LoadString loads json string from file
 func LoadString(filename string) (string, error) {
@@ -29,4 +29,10 @@ func WriteString(filename string, content string) {
 		panic(err)
 	}
 }
+
+
+func GetDataPath(host string) string {
+	return fmt.Sprintf("%s/%s.json", dataPath, host)
+}
+
 

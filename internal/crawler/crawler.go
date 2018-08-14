@@ -12,8 +12,10 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/spf13/viper"
 	"sync"
-	"fmt"
 )
+
+//datapath stores scraped data
+const  dataPath = "./data"
 
 //load config
 func init() {
@@ -28,7 +30,6 @@ func init() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
-
 
 }
 
@@ -179,7 +180,8 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 
 
 		var datas []Data
-		filename := fmt.Sprintf("./data/%s.json",e.Request.URL.Hostname())
+
+		filename := GetDataPath(e.Request.URL.Hostname())
 		jsonString, err := LoadString(filename)
 		if err == nil {
 			Unmarshall(jsonString, &datas)
