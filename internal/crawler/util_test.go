@@ -10,7 +10,7 @@ import (
 
 func TestGetDataPath(t *testing.T) {
 
-	config.CrawlerDataPath = "../../data"
+	config.DataPath = "../../data"
 
 	file := GetDataPath("www.domain.com")
 
@@ -23,7 +23,7 @@ func TestGetDataPath(t *testing.T) {
 func TestReadWriteString(t *testing.T) {
 
 	//set data path related to test
-	config.CrawlerDataPath = "../../data"
+	config.DataPath = "../../data"
 
 	content :=  "test"
 

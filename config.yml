@@ -2,8 +2,8 @@
 # sites to crawl
 entryPoint:
 - http://www.thaiunion.com
-- http://www.minor.com
-- http://www.indoramaventures.com
+#- http://www.minor.com
+#- http://www.indoramaventures.com
 
 
 # max depth for crawler to follow
@@ -17,7 +17,4 @@ delay: 2
 
 
 # path to store data scraped data from crawler
-crawlerDataPath: "data/crawler"
-
-# path to store index data
-indexDataPath: "data/index"
+dataPath: "data"

@@ -38,5 +38,5 @@ func WriteString(filename string, content string) error {
 
 func GetDataPath(host string) string {
 
-	return filepath.Join(config.CrawlerDataPath, host) + ".json"
+	return filepath.Join(config.DataPath, host) + ".json"
 }

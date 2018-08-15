@@ -8,11 +8,11 @@ import (
 // data path
 var (
 	EntryPoints []string
-	MaxDepth int
+	MaxDepth    int
 	Parallelism int
-	Delay int
-	CrawlerDataPath string
-	IndexDataPath string
+	Delay       int
+	DataPath    string
+
 )
 
 // load config
@@ -34,7 +34,6 @@ func init() {
 	MaxDepth = viper.GetInt("maxDepth")
 	Parallelism = viper.GetInt("parallelism")
 	Delay = viper.GetInt("delay")
-	CrawlerDataPath = viper.GetString("crawlerDataPath")
-	IndexDataPath = viper.GetString("indexDataPath")
+	DataPath = viper.GetString("dataPath")
 
 }
