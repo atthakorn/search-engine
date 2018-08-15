@@ -3,9 +3,9 @@ package crawler
 import (
 	"os"
 	"io/ioutil"
-	"fmt"
+	"path/filepath"
+	"log"
 )
-
 
 
 
@@ -25,14 +25,17 @@ func WriteString(filename string, content string) error {
 		return err
 	} else {
 		defer f.Close()
-		f.WriteString(content)
+
+		if _,err := f.WriteString(content); err != nil {
+			log.Printf("File not found: %v", f.Name())
+		}
+
 		return nil
 	}
 }
 
 
 func GetDataPath(host string) string {
-	return fmt.Sprintf("%s/%s.json", dataPath, host)
+
+	return filepath.Join(dataPath, host) + ".json"
 }
-
-

@@ -7,12 +7,14 @@ import (
 )
 
 
-
 func TestGetDataPath(t *testing.T) {
+
+	dataPath = "../../data"
 
 	file := GetDataPath("www.domain.com")
 
-	assert.Equal(t, "./data/www.domain.com.json", file)
+
+	assert.Equal(t, "../../data/www.domain.com.json", file)
 }
 
 
@@ -21,9 +23,11 @@ func TestReadWriteString(t *testing.T) {
 
 	//set data path related to test
 	dataPath = "../../data"
+
 	content :=  "test"
 
 	file := GetDataPath("www.domain.com")
+
 
 	WriteString(file, content)
 
@@ -31,7 +35,7 @@ func TestReadWriteString(t *testing.T) {
 
 	assert.Equal(t, content, s)
 
-	//remove file
+	//clean up file
 	os.Remove(file)
 
 }

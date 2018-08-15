@@ -1,3 +1,5 @@
+
+
 package crawler
 
 import (
@@ -7,25 +9,27 @@ import (
 	"strings"
 )
 
-func TestMarshall(t *testing.T) {
 
-	//mock data
-	data := Data{
+func TestMarshalUnmarshal(t *testing.T) {
+
+	//mock d1
+	d1 := Data{
 		Title: "test",
 		URL:   "http://test.com",
-		Texts: []string{"test"},
+		Texts: []string{"line 1", "line 2"},
 	}
 
 	//test marshal
-	json := Marshal([]Data{data})
-	assert.Equal(t, `[{"Title":"test","URL":"http://test.com","Texts":["test"]}]`, json)
+	json := Marshal([]Data{d1})
+	assert.Equal(t, `[{"title":"test","url":"http://test.com","texts":["line 1","line 2"]}]`, json)
 
 	//test unmarshal
-	var restore []Data
-	Unmarshal(json, &restore)
-	assert.True(t, assert.ObjectsAreEqualValues(data, restore[0]))
+	var d2 []Data
+	Unmarshal(json, &d2)
+	assert.True(t, assert.ObjectsAreEqualValues(d1, d2[0]))
 
 }
+
 
 func TestParseText(t *testing.T) {
 	html := `<html lang="en">
@@ -37,24 +41,19 @@ func TestParseText(t *testing.T) {
           			}
 				</style>
   			</head>
-  				<body class="body--12">
-			    	test
+  				<body>
+			    	line 1
+					line 2
 					<script src="https://domain.com/asset.js"></script>
   				</body>
 			</html>`
 
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(html))
 
-	text := ParseText(doc.Find("html"))
-
-	//test ParseText
-	assert.Equal(t, "\n\t\t\t\t\t    \n\t\t\t\t\n  \t\t\t\n  \t\t\t\t\n\t\t\t    \ttest\n\t\t\t\t\t\n  \t\t\t\t\n\t\t\t", text)
-
-
-
 	//test ParseTexts
 	texts := ParseTexts(doc.Find("html"))
 
-	assert.Equal(t, "test", texts[0])
+	assert.Equal(t, "line 1", texts[0])
+	assert.Equal(t, "line 2", texts[1])
 
 }

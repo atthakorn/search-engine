@@ -9,11 +9,10 @@ import (
 
 type Data struct {
 
-	Title string
-	URL   string
-	Texts []string
+	Title string	`json:"title"`
+	URL   string	`json:"url"`
+	Texts []string	`json:"texts"`
 }
-
 
 
 
@@ -40,7 +39,7 @@ func Unmarshal(s string, datas *[]Data) error {
 
 
 
-func ParseText(dom *goquery.Selection) string {
+func parseText(dom *goquery.Selection) string {
 
 	//remove script, style
 	dom.Find("script, style").Remove()
@@ -51,7 +50,7 @@ func ParseTexts(dom *goquery.Selection) []string {
 
 	var texts []string
 
-	for _, text := range  strings.Split(ParseText(dom), "\n") {
+	for _, text := range  strings.Split(parseText(dom), "\n") {
 		t := strings.TrimSpace(text)
 		if t != "" {
 			texts = append(texts, t)

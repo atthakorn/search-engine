@@ -58,8 +58,6 @@ func (c *Crawler) init() {
 		domains = append(domains, u.Hostname())
 
 	}
-	log.Printf("Fetch Sites: %v\n", domains)
-
 
 	// Instantiate default collector
 	collector := colly.NewCollector(
@@ -117,6 +115,8 @@ func (c *Crawler) isBlacklist(link string) bool {
 
 // Start scraping
 func (c *Crawler) Start() {
+
+	log.Printf("Fetch Sites: %v\n", c.collector.AllowedDomains)
 
 	start := time.Now()
 
