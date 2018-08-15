@@ -15,5 +15,9 @@ parallelism: 2
 # random delay (second)
 delay: 2
 
-# path to store data
-dataPath: "./data"
+
+# path to store data scraped data from crawler
+crawlerDataPath: "data/crawler"
+
+# path to store index data
+indexDataPath: "data/index"
