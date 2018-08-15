@@ -11,7 +11,7 @@ import (
 
 	"github.com/gocolly/colly"
 	"sync"
-	"github.com/atthakorn/search-engine/internal/config"
+	"github.com/atthakorn/web-scraper/internal/config"
 )
 
 

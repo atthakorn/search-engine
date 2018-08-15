@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/atthakorn/search-engine/internal/crawler"
+	"github.com/atthakorn/web-scraper/internal/crawler"
 )
 
 func main()  {

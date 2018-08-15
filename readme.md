@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.com/atthakorn/web-scraper.svg?branch=master)](https://travis-ci.com/atthakorn/search-engine) 
 
 
-This is experimental project to build search engine in `Go`. baked by [go-colly](https://github.com/gocolly/colly) (Elegant Scraper and Crawler Framework for Golang) 
+This is experimental project baked with [go-colly](https://github.com/gocolly/colly) to build web scraper in `Go`.  
 
 
  
