@@ -4,12 +4,13 @@ import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"github.com/atthakorn/search-engine/internal/config"
 )
 
 
 func TestGetDataPath(t *testing.T) {
 
-	dataPath = "../../data"
+	config.CrawlerDataPath = "../../data"
 
 	file := GetDataPath("www.domain.com")
 
@@ -22,7 +23,7 @@ func TestGetDataPath(t *testing.T) {
 func TestReadWriteString(t *testing.T) {
 
 	//set data path related to test
-	dataPath = "../../data"
+	config.CrawlerDataPath = "../../data"
 
 	content :=  "test"
 
@@ -46,6 +47,5 @@ func TestReadFileNotFound(t *testing.T) {
 	_, err := LoadString("www.domain.com")
 
 	assert.NotNil(t,err)
-
 
 }

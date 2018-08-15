@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"log"
+	"github.com/atthakorn/search-engine/internal/config"
 )
 
 
@@ -37,5 +38,5 @@ func WriteString(filename string, content string) error {
 
 func GetDataPath(host string) string {
 
-	return filepath.Join(dataPath, host) + ".json"
+	return filepath.Join(config.CrawlerDataPath, host) + ".json"
 }

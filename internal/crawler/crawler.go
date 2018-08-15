@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/gocolly/colly"
-	"github.com/spf13/viper"
 	"sync"
+	"github.com/atthakorn/search-engine/internal/config"
 )
 
 
@@ -28,17 +28,12 @@ type Crawler struct {
 
 func Make() *Crawler {
 
-	entryPoints := viper.GetStringSlice("entryPoint")
-	maxDepth := viper.GetInt("maxDepth")
-	parallelism := viper.GetInt("parallelism")
-	delay := viper.GetInt("delay")
-
 
 	crawler := &Crawler{
-		entryPoints: entryPoints,
-		maxDepth:    maxDepth,
-		parallelism: parallelism,
-		delay:       delay,
+		entryPoints: config.EntryPoints,
+		maxDepth:    config.MaxDepth,
+		parallelism: config.Parallelism,
+		delay:       config.Delay,
 	}
 	crawler.init()
 	return crawler

@@ -1,9 +1,9 @@
 
 # sites to crawl
 entryPoint:
-#- http://www.thaiunion.com
+- http://www.thaiunion.com
 - http://www.minor.com
-#- http://www.indoramaventures.com
+- http://www.indoramaventures.com
 
 
 # max depth for crawler to follow
