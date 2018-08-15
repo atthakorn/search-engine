@@ -23,6 +23,6 @@ func init() {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	dataPath = viper.GetString("dataPath")
+	dataPath = viper.GetString("crawlerDataPath")
 
 }
