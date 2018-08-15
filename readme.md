@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.com/atthakorn/web-scraper.svg?branch=master)](https://travis-ci.com/atthakorn/search-engine) 
 
 
-This is experimental project baked with [go-colly](https://github.com/gocolly/colly) to build web scraper in `Go`.  
+This is experimental project baked with [go-colly](https://github.com/gocolly/colly) and  [bleevesearch](https://github.com/blevesearch) to build web scraper in `Go`.  
 
 
  
