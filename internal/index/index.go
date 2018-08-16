@@ -112,14 +112,16 @@ func indexing(index bleve.Index) (count int, err error) {
 
 	//bulk by indexing 100 documents at a time
 	batch := index.NewBatch()
-	batchSize := 1000
+	batchSize := 50
 	batchCount:= 0
 	for _, entry := range entries {
 
-		//skip entry if it is directory
-		if entry.IsDir() {
+		//skip entry if it is directory, or not json file
+		if entry.IsDir() ||  !strings.HasSuffix(entry.Name(), ".json") {
 			continue
 		}
+
+
 		file := filepath.Join(dataPath, entry.Name())
 		json, err := crawler.LoadString(file)
 
@@ -148,10 +150,13 @@ func indexing(index bleve.Index) (count int, err error) {
 			batchCount++
 			if batchCount >= batchSize {
 				err = index.Batch(batch)
+
 				if err != nil {
 					log.Printf("Bulk indexing error: %v", err)
 					return 0, err
 				}
+
+				log.Printf("Documents already indexed: %d", count)
 				batch = index.NewBatch()
 				batchCount = 0
 			}
