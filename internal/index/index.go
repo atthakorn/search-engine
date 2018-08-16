@@ -12,14 +12,14 @@ import (
 
 	"strings"
 	"time"
+	"os"
 )
 
 
 
 func Index() {
 
-	index := openOrCreate()
-
+	index := createIndex()
 	defer index.Close()
 
 	benchmark := benchmark(index, indexing)
@@ -45,27 +45,34 @@ func Query(index bleve.Index) {
 
 }
 
-func openOrCreate() bleve.Index {
+
+func setupDataDirectory() {
+
+	//destroy any outdated data
+	os.RemoveAll(config.IndexPath)
+
+	//create data placeholder
+	os.Mkdir(config.IndexPath, 0755)
+}
+
+
+func createIndex() bleve.Index {
+
+	setupDataDirectory()
 
 	indexPath := config.IndexPath
 
 	index, err := bleve.Open(indexPath)
 
-	if err == bleve.ErrorIndexPathDoesNotExist || err == bleve.ErrorIndexMetaMissing {
-		log.Printf("Creating new index...")
+	log.Printf("Creating new index...")
 
-		indexMapping := buildIndexMapping()
-		index, err = bleve.New(indexPath, indexMapping)
+	indexMapping := buildIndexMapping()
+	index, err = bleve.New(indexPath, indexMapping)
 
-		if err != nil {
-			log.Printf("Terminate indexer, cannot create index at %s", indexPath)
-			return nil
-		}
-
-	} else {
-		log.Printf("Open existing index ...")
+	if err != nil {
+		log.Printf("Terminate indexer, cannot create index at %s", indexPath)
+		return nil
 	}
-
 
 	return index
 }
@@ -94,7 +101,7 @@ func benchmark(index bleve.Index, indexing func(index bleve.Index) (int, error))
 		indexDuration := time.Since(startTime)
 		indexDurationSeconds := float64(indexDuration) / float64(time.Second)
 		timePerDocument := float64(indexDuration) / float64(count)
-		log.Printf("Indexed %d documents, in %.2fs (average %.2f ms/documents)", count, indexDurationSeconds, timePerDocument/float64(time.Millisecond))
+		log.Printf("Indexed %d documents, in %.2fs (average %.2f ms/document)", count, indexDurationSeconds, timePerDocument/float64(time.Millisecond))
 	}
 }
 
@@ -175,3 +182,5 @@ func indexing(index bleve.Index) (count int, err error) {
 
 	return count, nil
 }
+
+

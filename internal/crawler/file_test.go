@@ -12,7 +12,7 @@ func TestGetDataPath(t *testing.T) {
 
 	config.DataPath = "../../data"
 
-	file := GetDataPath("www.domain.com")
+	file := JsonFileByHostname("www.domain.com")
 
 
 	assert.Equal(t, "../../data/www.domain.com.json", file)
@@ -27,7 +27,7 @@ func TestReadWriteString(t *testing.T) {
 
 	content :=  "test"
 
-	file := GetDataPath("www.domain.com")
+	file := JsonFileByHostname("www.domain.com")
 
 
 	WriteString(file, content)

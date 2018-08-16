@@ -12,8 +12,6 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/atthakorn/web-scraper/internal/config"
 	"os"
-	"io/ioutil"
-	"path/filepath"
 )
 
 // Crawler
@@ -87,31 +85,19 @@ func (c *Crawler) init() {
 	c.collector = collector
 
 
-	//clean up outdate resource
-	c.removeData()
-
+	c.setupDataDirectory()
 
 }
 
-func (c *Crawler) removeData() {
+func (c *Crawler) setupDataDirectory() {
 
-	//remove any index
-	os.RemoveAll(config.IndexPath)
+	//destroy any outdated data
+	os.RemoveAll(config.DataPath)
 
-	//remove crawl data
-	entries, _ := ioutil.ReadDir(config.DataPath)
-	for _, entry := range entries {
+	//create data placeholder
+	os.Mkdir(config.DataPath, 0755)
 
-		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".json") {
 
-			path := filepath.Join(config.DataPath, entry.Name())
-			err := os.Remove(path)
-
-			if err != nil {
-				log.Printf("cannot remove data at %s", path)
-			}
-		}
-	}
 }
 
 
@@ -193,14 +179,14 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 
 			var datas []Data
 
-			filename := GetDataPath(e.Request.URL.Hostname())
-			jsonString, _ := LoadString(filename)
+			file := JsonFileByHostname(e.Request.URL.Hostname())
+			jsonString, _ := LoadString(file)
 
 
 			Unmarshal(jsonString, &datas)
 			datas = append(datas, *data)
 
-			WriteString(filename, Marshal(datas))
+			WriteString(file, Marshal(datas))
 
 
 		} else {

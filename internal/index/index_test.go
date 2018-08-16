@@ -33,7 +33,7 @@ func TestCreateIndex(t *testing.T) {
 	config.DataPath = "../../testdata" //load data from testdata
 	config.IndexPath = "./data/index"
 
-	index := openOrCreate()
+	index := createIndex()
 
 	defer destroyDataFolder(index, config.DataPath)
 
@@ -49,7 +49,7 @@ func TestIndexing(t *testing.T) {
 	config.DataPath = "../../testdata" //load data from testdata
 	config.IndexPath = "./data/index"
 
-	index := openOrCreate()
+	index := createIndex()
 
 	defer destroyDataFolder(index, "./data")
 
@@ -66,7 +66,7 @@ func TestIndexingFail(t *testing.T) {
 	config.DataPath = "./anywhere"
 	config.IndexPath = "./data/index"
 
-	index := openOrCreate()
+	index := createIndex()
 	defer destroyDataFolder(index, "./data")
 
 	_, err := indexing(index)

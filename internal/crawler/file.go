@@ -10,10 +10,10 @@ import (
 
 
 
-// LoadString loads json string from file
-func LoadString(filename string) (string, error) {
+// LoadString loads string from file
+func LoadString(file string) (string, error) {
 
-	f, err := ioutil.ReadFile(filename)
+	f, err := ioutil.ReadFile(file)
 	if err != nil {
 		return "", err
 	}
@@ -21,8 +21,8 @@ func LoadString(filename string) (string, error) {
 }
 
 // WriteString writes string to file
-func WriteString(filename string, content string) error {
-	if f, err := os.Create(filename); err != nil {
+func WriteString(file string, content string) error {
+	if f, err := os.Create(file); err != nil {
 		return err
 	} else {
 		defer f.Close()
@@ -36,7 +36,7 @@ func WriteString(filename string, content string) error {
 }
 
 
-func GetDataPath(host string) string {
+func JsonFileByHostname(host string) string {
 
 	return filepath.Join(config.DataPath, host) + ".json"
 }
