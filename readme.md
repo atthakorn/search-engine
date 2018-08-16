@@ -9,18 +9,24 @@ This is experimental project baked with [go-colly](https://github.com/gocolly/co
 
 ### Prerequisite
 
-To use ICU in [blevex](https://github.com/blevesearch/blevex) (blevesearch's extension), it requires to install particular dependencies by following through these steps 
+To use package in [blevex](https://github.com/blevesearch/blevex) (blevesearch's extension), 
+it is required to install C dependency as following steps.
 
-This is verified against `Debian GNU/Linux 8.11 (jessie)`
+*This is verified against `Debian GNU/Linux 8.11 (jessie)*
 
-```
+```shell
 $ sudo apt-get install libleveldb-dev libstemmer-dev libicu-dev build-essential
-$ go get -u -v  github.com/blevesearch/bleve
-$ cd $GOPATH/src/github.com/blevesearch/bleve/analysis/token
+$ cd ~
 $ git clone https://github.com/blevesearch/cld2.git
 $ cd cld2/internal/
 $ ./compile_libs.sh
 $ sudo cp *.so /usr/local/lib
-$ go get -u -v -tags full github.com/blevesearch/bleve
 ```
 
+
+Minimum requirement for ICU analyzer and tokenizer, libicu-dev only is required. 
+Thus, go ahead and simply install it by issue this command in prompt
+
+```shell
+$ sudo apt-get install libicu-dev
+```   
