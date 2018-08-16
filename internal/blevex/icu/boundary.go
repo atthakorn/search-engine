@@ -7,7 +7,6 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-// Patch locally issue from https://github.com/blevesearch/blevex/issues/34
 
 package icu
 
@@ -18,7 +17,6 @@ package icu
 // #include "unicode/uchar.h"
 // #include "unicode/ubrk.h"
 // #include "unicode/ustring.h"
-// #include "unicode/ucnv.h"
 import "C"
 
 import (
@@ -144,7 +142,6 @@ func UnicodeWordBoundaryTokenizerConstructor(config map[string]interface{}, cach
 }
 
 func init() {
-	// fixed issue in https://github.com/blevesearch/blevex/issues/34
-	C.ucnv_setDefaultName(C.CString("UTF-8"))
+
 	registry.RegisterTokenizer(Name, UnicodeWordBoundaryTokenizerConstructor)
 }
