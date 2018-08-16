@@ -17,7 +17,7 @@ func LoadString(filename string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(f), err
+	return string(f), nil
 }
 
 // WriteString writes string to file

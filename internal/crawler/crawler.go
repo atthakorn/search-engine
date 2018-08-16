@@ -11,6 +11,9 @@ import (
 	"sync"
 	"github.com/gocolly/colly"
 	"github.com/atthakorn/web-scraper/internal/config"
+	"os"
+	"io/ioutil"
+	"path/filepath"
 )
 
 // Crawler
@@ -21,6 +24,7 @@ type Crawler struct {
 	delay       int
 	collector   *colly.Collector
 	total       int64
+	mutexLock	sync.Mutex
 }
 
 func Make() *Crawler {
@@ -82,7 +86,35 @@ func (c *Crawler) init() {
 
 	c.collector = collector
 
+
+	//clean up outdate resource
+	c.removeData()
+
+
 }
+
+func (c *Crawler) removeData() {
+
+	//remove any index
+	os.RemoveAll(config.IndexPath)
+
+	//remove crawl data
+	entries, _ := ioutil.ReadDir(config.DataPath)
+	for _, entry := range entries {
+
+		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".json") {
+
+			path := filepath.Join(config.DataPath, entry.Name())
+			err := os.Remove(path)
+
+			if err != nil {
+				log.Printf("cannot remove data at %s", path)
+			}
+		}
+	}
+}
+
+
 
 // Check if  link is file
 func (c *Crawler) isBlacklist(link string) bool {
@@ -104,12 +136,17 @@ func (c *Crawler) isBlacklist(link string) bool {
 	return match
 }
 
+
+
 // Start scraping
 func (c *Crawler) Start() {
+
+
 
 	log.Printf("Fetch Sites: %v\n", c.collector.AllowedDomains)
 
 	start := time.Now()
+
 
 	//reset count to zero
 	c.total = 0
@@ -150,20 +187,22 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 			}
 
 			//mutual lock for mutithread
-			var mutex = &sync.Mutex{}
-			mutex.Lock()
-			defer mutex.Unlock()
+
+			c.mutexLock.Lock()
+			defer c.mutexLock.Unlock()
 
 			var datas []Data
 
 			filename := GetDataPath(e.Request.URL.Hostname())
-			jsonString, err := LoadString(filename)
-			if err == nil {
-				Unmarshal(jsonString, &datas)
-			}
+			jsonString, _ := LoadString(filename)
+
+
+			Unmarshal(jsonString, &datas)
 			datas = append(datas, *data)
 
 			WriteString(filename, Marshal(datas))
+
+
 		} else {
 			log.Printf("Fail to parse: %s", e.Request.URL)
 		}
