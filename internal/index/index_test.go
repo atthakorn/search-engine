@@ -12,12 +12,6 @@ import (
 )
 
 
-func init() {
-	config.IndexPath = "./data/index"
-	config.DataPath = "./data"
-}
-
-
 
 type indexMock struct {
 	mock.Mock
@@ -50,6 +44,7 @@ func TestCreateIndexMapping (t *testing.T) {
 
 func TestCreateIndex(t *testing.T) {
 
+	config.IndexPath = "./data/index"
 
 	index := openOrCreate()
 
@@ -57,7 +52,7 @@ func TestCreateIndex(t *testing.T) {
 		index.Close()
 		err := os.RemoveAll(config.DataPath)
 		if err != nil {
-			log.Printf("cannot remove test data path: %v", err)
+			log.Printf("Cannot remove test data path: %v", err)
 		}
 	}()
 
@@ -66,5 +61,25 @@ func TestCreateIndex(t *testing.T) {
 	assert.True(t, ok)
 
 	assert.Equal(t, "th", index.Mapping().(*mapping.IndexMappingImpl).DefaultAnalyzer)
+}
 
+
+func TestIndexing(t *testing.T) {
+	config.IndexPath = "./data/index"
+	config.DataPath = "../../testdata"  //load data from testdata
+
+	index := openOrCreate()
+
+	defer func() {
+		index.Close()
+		config.DataPath = "./data"  //remove data
+		err := os.RemoveAll(config.IndexPath)
+		if err != nil {
+			log.Printf("cannot remove test data path: %v", err)
+		}
+	}()
+
+	count, _ := indexing(index)
+
+	assert.Equal(t, 15, count)
 }
