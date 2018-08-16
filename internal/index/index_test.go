@@ -7,16 +7,11 @@ import (
 	"github.com/blevesearch/bleve/mapping"
 	"github.com/stretchr/testify/assert"
 	"os"
-	"fmt"
 )
 
-func destroyDataFolder(index bleve.Index, dataPath string) {
+func closeAndDestroy(index bleve.Index, indexPath string) {
 	index.Close()
-	config.DataPath = dataPath //remove data
-	err := os.RemoveAll(config.IndexPath)
-	if err != nil {
-		fmt.Printf("cannot remove test data path: %v", err)
-	}
+	os.RemoveAll(indexPath)
 }
 
 func TestCreateIndexMapping(t *testing.T) {
@@ -31,11 +26,11 @@ func TestCreateIndexMapping(t *testing.T) {
 func TestCreateIndex(t *testing.T) {
 
 	config.DataPath = "../../testdata" //load data from testdata
-	config.IndexPath = "./data/index"
+	config.IndexPath = "./index"
 
 	index := createIndex()
 
-	defer destroyDataFolder(index, config.DataPath)
+	defer closeAndDestroy(index, config.IndexPath)
 
 	_, ok := index.(bleve.Index)
 
@@ -47,11 +42,11 @@ func TestCreateIndex(t *testing.T) {
 func TestIndexing(t *testing.T) {
 
 	config.DataPath = "../../testdata" //load data from testdata
-	config.IndexPath = "./data/index"
+	config.IndexPath = "./index"
 
 	index := createIndex()
 
-	defer destroyDataFolder(index, "./data")
+	defer closeAndDestroy(index, config.IndexPath)
 
 
 	count, _ := indexing(index)
@@ -64,10 +59,10 @@ func TestIndexing(t *testing.T) {
 func TestIndexingFail(t *testing.T) {
 
 	config.DataPath = "./anywhere"
-	config.IndexPath = "./data/index"
+	config.IndexPath = "./index"
 
 	index := createIndex()
-	defer destroyDataFolder(index, "./data")
+	defer closeAndDestroy(index, config.IndexPath)
 
 	_, err := indexing(index)
 
