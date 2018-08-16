@@ -1,4 +1,4 @@
-package index
+package patch
 
 //workaround for issue, https://github.com/blevesearch/blevex/issues/34
 
