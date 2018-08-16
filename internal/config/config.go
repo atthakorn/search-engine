@@ -12,7 +12,7 @@ var (
 	Parallelism int
 	Delay       int
 	DataPath    string
-
+	IndexPath	string
 )
 
 // load config
@@ -35,5 +35,6 @@ func init() {
 	Parallelism = viper.GetInt("parallelism")
 	Delay = viper.GetInt("delay")
 	DataPath = viper.GetString("dataPath")
+	IndexPath = viper.GetString("indexPath")
 
 }

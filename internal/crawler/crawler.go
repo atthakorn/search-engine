@@ -8,13 +8,10 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
-
-	"github.com/gocolly/colly"
 	"sync"
+	"github.com/gocolly/colly"
 	"github.com/atthakorn/web-scraper/internal/config"
 )
-
-
 
 // Crawler
 type Crawler struct {
@@ -27,7 +24,6 @@ type Crawler struct {
 }
 
 func Make() *Crawler {
-
 
 	crawler := &Crawler{
 		entryPoints: config.EntryPoints,
@@ -158,7 +154,6 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 			mutex.Lock()
 			defer mutex.Unlock()
 
-
 			var datas []Data
 
 			filename := GetDataPath(e.Request.URL.Hostname())
@@ -202,7 +197,6 @@ func (c *Crawler) onScraped() colly.ScrapedCallback {
 		log.Printf("Scraped: %s (%s)\n", r.Request.URL, elapsed)
 	}
 }
-
 
 func (c *Crawler) onError() colly.ErrorCallback {
 
