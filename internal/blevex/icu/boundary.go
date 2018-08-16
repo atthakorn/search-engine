@@ -24,7 +24,7 @@ import (
 
 	"github.com/blevesearch/bleve/analysis"
 	"github.com/blevesearch/bleve/registry"
-	_ "github.com/atthakorn/web-scraper/internal/blevex/patch"
+
 
 )
 

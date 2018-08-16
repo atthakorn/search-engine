@@ -1,4 +1,4 @@
-package patch
+package icu
 
 //workaround for issue, https://github.com/blevesearch/blevex/issues/34
 
