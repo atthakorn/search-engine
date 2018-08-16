@@ -2,3 +2,4 @@
 vendor/
 data/
 coverage.txt
+config.yml
