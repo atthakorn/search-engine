@@ -112,7 +112,7 @@ func indexing(index bleve.Index) (count int, err error) {
 
 	//bulk by indexing 100 documents at a time
 	batch := index.NewBatch()
-	batchSize := 100
+	batchSize := 1000
 	batchCount:= 0
 	for _, entry := range entries {
 
@@ -156,6 +156,15 @@ func indexing(index bleve.Index) (count int, err error) {
 				batchCount = 0
 			}
 
+		}
+	}
+
+	// flush the last batch
+	if batchCount > 0 {
+		err = index.Batch(batch)
+		if err != nil {
+			log.Printf("Bulk indexing error: %v", err)
+			return 0, err
 		}
 	}
 

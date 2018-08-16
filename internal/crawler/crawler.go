@@ -164,6 +164,8 @@ func (c *Crawler) onScraping() colly.HTMLCallback {
 			datas = append(datas, *data)
 
 			WriteString(filename, Marshal(datas))
+		} else {
+			log.Printf("Fail to parse: %s", e.Request.URL)
 		}
 
 	}
