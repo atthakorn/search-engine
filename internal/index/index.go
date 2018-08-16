@@ -110,6 +110,10 @@ func indexing(index bleve.Index) (count int, err error) {
 		return 0, err
 	}
 
+	//bulk by indexing 100 documents at a time
+	batch := index.NewBatch()
+	batchSize := 100
+	batchCount:= 0
 	for _, entry := range entries {
 
 		//skip entry if it is directory
@@ -135,11 +139,23 @@ func indexing(index bleve.Index) (count int, err error) {
 
 		for _, data := range datas {
 			count++
-			index.Index(data.URL, &Data{
+			batch.Index(data.URL, &Data{
 				URL:   data.URL,
 				Title: data.Title,
 				Body:  strings.Join(data.Texts, " · "),
 			})
+
+			batchCount++
+			if batchCount >= batchSize {
+				err = index.Batch(batch)
+				if err != nil {
+					log.Printf("Bulk indexing error: %v", err)
+					return 0, err
+				}
+				batch = index.NewBatch()
+				batchCount = 0
+			}
+
 		}
 	}
 
