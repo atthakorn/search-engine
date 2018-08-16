@@ -113,7 +113,7 @@ func indexing(index bleve.Index) (count int, err error) {
 	for _, entry := range entries {
 
 		//skip entry if it is directory
-		if (entry.IsDir()) {
+		if entry.IsDir() {
 			continue
 		}
 		file := filepath.Join(dataPath, entry.Name())
@@ -130,6 +130,7 @@ func indexing(index bleve.Index) (count int, err error) {
 
 		if err != nil {
 			log.Printf("Fail to unmarshal data from json: %s", file)
+			return 0, err
 		}
 
 		for _, data := range datas {
