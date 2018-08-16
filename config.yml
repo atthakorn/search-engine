@@ -17,5 +17,5 @@ delay: 2
 
 
 # path to store data scraped data from crawler
-dataPath: "data/crawler"
+dataPath: "data"
 indexPath: "data/index"

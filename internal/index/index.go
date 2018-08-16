@@ -19,8 +19,12 @@ import (
 func Index() {
 
 	index := openOrCreate()
+
+	defer index.Close()
+
 	benchmark := benchmark(index, indexing)
 	benchmark()
+
 }
 
 
@@ -61,6 +65,7 @@ func openOrCreate() bleve.Index {
 	} else {
 		log.Printf("Open existing index ...")
 	}
+
 
 	return index
 }
@@ -107,7 +112,11 @@ func indexing(index bleve.Index) (count int, err error) {
 
 	for _, entry := range entries {
 
-		file := filepath.Join(config.DataPath, entry.Name())
+		//skip entry if it is directory
+		if (entry.IsDir()) {
+			continue
+		}
+		file := filepath.Join(dataPath, entry.Name())
 		json, err := crawler.LoadString(file)
 
 		if err != nil {

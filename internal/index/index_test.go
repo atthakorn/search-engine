@@ -4,12 +4,17 @@ import (
 	"github.com/atthakorn/web-scraper/internal/config"
 	"github.com/stretchr/testify/mock"
 	"github.com/blevesearch/bleve"
+	"testing"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/stretchr/testify/assert"
+	"os"
+	"log"
 )
 
 
 func init() {
-	config.DataPath = "../../data/crawler"
-	config.IndexPath = "../../data/index"
+	config.IndexPath = "./data/index"
+	config.DataPath = "./data"
 }
 
 
@@ -31,31 +36,35 @@ func (m *indexMock) openOrCreate() bleve.Index {
 }
 
 
-
-/*func TestCreateIndexMapping (t *testing.T) {
+func TestCreateIndexMapping (t *testing.T) {
 
 	indexMapping := buildIndexMapping().(*mapping.IndexMappingImpl)
 
 
 	assert.Equal(t,"th", indexMapping.DefaultAnalyzer )
+
+	assert.IsType(t, &mapping.IndexMappingImpl{}, indexMapping)
 }
 
 
 
-func TestBenchmark(t *testing.T) {
-
-	mockObject := &indexMock{}
-
-	var index bleve.Index
-
-	mockObject.On("openOrCreate").Return(index)
-	mockObject.On("indexing", mockObject.indexing).Return(0,nil)
+func TestCreateIndex(t *testing.T) {
 
 
-	benchmark := benchmark(index, mockObject.indexing)
-	benchmark()
+	index := openOrCreate()
 
+	defer func() {
+		index.Close()
+		err := os.RemoveAll(config.DataPath)
+		if err != nil {
+			log.Printf("cannot remove test data path: %v", err)
+		}
+	}()
 
+	_, ok := index.(bleve.Index)
 
+	assert.True(t, ok)
 
-}*/
+	assert.Equal(t, "th", index.Mapping().(*mapping.IndexMappingImpl).DefaultAnalyzer)
+
+}
