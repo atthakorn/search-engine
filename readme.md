@@ -25,7 +25,7 @@ $ sudo cp *.so /usr/local/lib
 
 
 Minimum requirement for ICU analyzer and tokenizer, libicu-dev only is required. 
-Thus, go ahead and simply install it by issue this command in prompt
+Thus, go ahead and simply install it by issuing this command in prompt
 
 ```shell
 $ sudo apt-get install libicu-dev
