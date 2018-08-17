@@ -17,6 +17,11 @@
 
     <style>
 
+        a:hover, a:visited, a:link, a:active {
+            color: #337ab7;
+            text-decoration: none !important;
+        }
+
         #custom-search-input {
             margin: 2em;
         }
@@ -49,6 +54,7 @@
                 </div>
                 <p class="text-center">The Experimental Search Engine in Go</p>
 
+
             </div>
             <!-- search form -->
             <div class="col-md-12">
@@ -67,11 +73,15 @@
             <!-- search results -->
             <div id="searchResultsArea" class="col-md-12">
 
-            {{if gt .Result.TotalHit 0}}
+
                 <h5 class="hit-benchmark">
-                {{.Result.TotalHit}} results ({{.Result.Time}} ms)
+                {{if gt .Result.TotalHit 0}}
+                {{.Result.TotalHit}} results ({{.Result.Time | printf "%0.3F"}} s)
+                {{else}}
+                    No records found
+                {{end}}
                 </h5>
-            {{end}}
+
 
                 <div class="col-md-12">
 
@@ -79,7 +89,7 @@
                     <div>
 
                         <b class="hit-title">
-                            <a class="resultLink" href="{{.URL}}">{{.Title}}</a>
+                            <a class="resultLink" href="{{.URL}}" target="_blank">{{.Title | noescape}}</a>
                         </b>
 
                         <span class="badge pull-right hit-score"
@@ -88,12 +98,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading hit-url">
 
-                            {{.URL}}
+                            {{.URL | noescape }}
                             </div>
 
                             <div class="panel-body hit-desc">
                                 <div>
-                                    <div>{{ .Description }}
+                                    <div>{{ .Description  | noescape}}
                                     </div>
                                 </div>
                             </div>

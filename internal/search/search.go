@@ -8,6 +8,7 @@ import (
 	_ "github.com/atthakorn/web-scraper/internal/blevex/lang/th"
 	"github.com/blevesearch/bleve/search"
 	"time"
+	"net/url"
 )
 
 
@@ -21,7 +22,7 @@ type Hit struct {
 
 type Result struct {
 	TotalHit int
-	//time in ms
+	//time in second
 	Time float64
 	Hits []Hit
 }
@@ -66,7 +67,7 @@ func openIndex() (bleve.Index,  error)  {
 		return nil, err
 	}
 
-	log.Printf("Opening index...")
+
 	return index, nil
 }
 
@@ -75,7 +76,7 @@ func openIndex() (bleve.Index,  error)  {
 func newResult(searchResult *bleve.SearchResult) *Result {
 
 	result := &Result{
-		Time: float64(searchResult.Took) / float64(time.Millisecond),
+		Time: float64(searchResult.Took) / float64(time.Second),
 	}
 	for _, searchResultHit := range searchResult.Hits {
 		result.Hits = append(result.Hits, *newHit(searchResultHit))
@@ -87,8 +88,9 @@ func newResult(searchResult *bleve.SearchResult) *Result {
 
 func newHit(searchResultHit *search.DocumentMatch) *Hit {
 
+	urlPath, _ := url.PathUnescape(searchResultHit.ID)
 	hit := &Hit {
-		URL: searchResultHit.ID,
+		URL: urlPath,
 		Score: searchResultHit.Score,
 	}
 
