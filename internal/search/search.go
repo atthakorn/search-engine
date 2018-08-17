@@ -43,7 +43,7 @@ func Query(keyword string) *Result {
 	request := bleve.NewSearchRequest(query)
 	request.Highlight = bleve.NewHighlight()
 	request.Fields = []string{"*"}
-	request.Size = 10 // unlimited
+	request.Size = 10000 // unlimited
 
 	searchResults, err := index.Search(request)
 	if err != nil {
