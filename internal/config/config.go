@@ -18,7 +18,7 @@ var (
 // load config
 func init() {
 
-	viper.SetConfigName("config")
+	viper.SetConfigName(".config")
 	viper.SetConfigType("yaml")
 	// if in project root
 	viper.AddConfigPath(".")
