@@ -30,3 +30,78 @@ Thus, go ahead and simply install it by issuing this command in prompt
 ```shell
 $ sudo apt-get install libicu-dev
 ```   
+
+
+### Installation
+
+Use `git clone` or `go get` to download project to your go workspace in `$GOPATH` then run `dep ensure` to initialise project.
+
+```shell
+
+$ go get github.com/atthakorn/search-engine
+$ cd $GOPATH/src/github.com/atthakorn/search-engine
+$ dep ensure
+```
+
+### Config
+
+Here is the list of parameter you can find in `.config.yml`
+
+
+```yaml
+
+# sites to crawl
+entryPoint:
+- https://en.wikipedia.org/wiki/Main_Page
+
+
+# max depth for crawler to follow
+maxDepth: 2
+
+# max worker
+parallelism: 1
+
+# random delay (second)
+delay: 1
+
+
+# path to store data scraped data from crawler
+dataPath: "data/crawl"
+
+# path to store indexed data
+indexPath: "data/index"
+
+
+# http address, 0.0.0.0:8080 or :8080, it means listening all ipv4 address in local machine
+httpAddress: ":8080"
+```
+
+### Crawling & Indexing
+
+To crawling websites, just `cd` to project root and run
+
+```shell
+$ go run cmd/crawl/main.go
+``` 
+
+Once, crawl complete, the scraped data will be kept at `./data/crawl/*.json`
+
+
+Now you can index crawl data by issuing following command
+
+```shell
+$ go run cmd/index/main.go
+```
+
+The data will be indexed by boltdb, the file will be located at `./data/index/*`
+
+
+### Starting Up Http Server
+ 
+ Search Engine comes with `simple search application`  , you can start http server by following command
+ 
+ ```shell
+$ go run cmd/http/main.go
+```
+
+and you can open application via browser at `http://localhost:8080`
