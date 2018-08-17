@@ -10,7 +10,7 @@ var (
 	EntryPoints []string
 	MaxDepth    int
 	Parallelism int
-	Delay       int
+	Delay       int64
 	DataPath    string
 	IndexPath	string
 	HttpAddress string
@@ -34,7 +34,7 @@ func init() {
 	EntryPoints = viper.GetStringSlice("entryPoint")
 	MaxDepth = viper.GetInt("maxDepth")
 	Parallelism = viper.GetInt("parallelism")
-	Delay = viper.GetInt("delay")
+	Delay = viper.GetInt64("delay")
 	DataPath = viper.GetString("dataPath")
 	IndexPath = viper.GetString("indexPath")
 	HttpAddress = viper.GetString("httpAddress")

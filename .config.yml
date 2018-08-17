@@ -10,10 +10,10 @@ entryPoint:
 maxDepth: 3
 
 # max worker
-parallelism: 5
+parallelism: 1
 
 # random delay (second)
-delay: 2
+delay: 1
 
 
 # path to store data scraped data from crawler

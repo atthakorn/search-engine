@@ -19,7 +19,7 @@ type Crawler struct {
 	entryPoints []string
 	maxDepth    int
 	parallelism int
-	delay       int
+	delay       int64
 	collector   *colly.Collector
 	total       int64
 	mutexLock	sync.Mutex
@@ -65,7 +65,11 @@ func (c *Crawler) init() {
 		DisableKeepAlives: true,
 	})
 
-	collector.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: c.parallelism})
+	collector.Limit(&colly.LimitRule{
+		DomainGlob: "*",
+		Parallelism: c.parallelism,
+		RandomDelay: time.Duration(c.delay) * time.Second,
+	})
 
 	// Called after response received
 	collector.OnResponse(c.onResponse())
