@@ -1,0 +1,124 @@
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>The Experimental Search Engine in Go</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+
+    <style>
+
+        #custom-search-input {
+            margin: 2em;
+        }
+
+        .hit-title {
+            margin-left: 0.5em;
+        }
+
+        .hit-benchmark {
+            margin-left: 1.5em;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+    <form method="GET" id="searchForm" action="/">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="page-header text-center">
+
+                    <h1><a href="/">Search Engine</a></h1>
+                </div>
+                <p class="text-center">The Experimental Search Engine in Go</p>
+
+            </div>
+            <!-- search form -->
+            <div class="col-md-12">
+                <div id="custom-search-input">
+                    <div class="input-group col-md-6 col-md-offset-3">
+                        <input id="q" name="q" type="text" class="form-control input-lg" placeholder="Search"
+                               value="{{.Q}}">
+                        <span class="input-group-btn">
+                        <button id="searchButton" class="btn btn-info btn-lg" type="submit">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <!-- search results -->
+            <div id="searchResultsArea" class="col-md-12">
+
+            {{if gt .Result.TotalHit 0}}
+                <h5 class="hit-benchmark">
+                {{.Result.TotalHit}} results ({{.Result.Time}} ms)
+                </h5>
+            {{end}}
+
+                <div class="col-md-12">
+
+                {{range .Result.Hits}}
+                    <div>
+
+                        <b class="hit-title">
+                            <a class="resultLink" href="{{.URL}}">{{.Title}}</a>
+                        </b>
+
+                        <span class="badge pull-right hit-score"
+                              title="Ranking Score">{{.Score | printf "%0.3f"}}</span><span></span>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading hit-url">
+
+                            {{.URL}}
+                            </div>
+
+                            <div class="panel-body hit-desc">
+                                <div>
+                                    <div>{{ .Description }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                {{end}}
+
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+
+
+    <hr>
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

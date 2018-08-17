@@ -13,6 +13,7 @@ var (
 	Delay       int
 	DataPath    string
 	IndexPath	string
+	HttpAddress string
 )
 
 // load config
@@ -36,5 +37,7 @@ func init() {
 	Delay = viper.GetInt("delay")
 	DataPath = viper.GetString("dataPath")
 	IndexPath = viper.GetString("indexPath")
+	HttpAddress = viper.GetString("httpAddress")
+
 
 }

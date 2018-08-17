@@ -21,3 +21,7 @@ dataPath: "data/crawl"
 
 # path to store indexed data
 indexPath: "data/index"
+
+
+# http address, 0.0.0.0:8080 or :8080, it means listening all ipv4 address in local machine
+httpAddress: ":8080"
