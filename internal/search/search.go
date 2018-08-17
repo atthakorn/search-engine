@@ -40,7 +40,9 @@ func Query(keyword string) *Result {
 	defer index.Close()
 
 	//use fuzzy query with highlight
-	query := bleve.NewFuzzyQuery(keyword)
+	query := bleve.NewMatchQuery(keyword)
+
+
 	request := bleve.NewSearchRequest(query)
 	request.Highlight = bleve.NewHighlight()
 	request.Fields = []string{"*"}
