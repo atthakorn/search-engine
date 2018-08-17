@@ -1,4 +1,4 @@
-package query
+package search
 
 import (
 	"github.com/blevesearch/bleve"
@@ -6,7 +6,6 @@ import (
 	"github.com/atthakorn/web-scraper/internal/config"
 
 	_ "github.com/atthakorn/web-scraper/internal/blevex/lang/th"
-	"encoding/json"
 	"github.com/blevesearch/bleve/search"
 	"time"
 )
@@ -21,7 +20,7 @@ type Hit struct {
 
 
 type Result struct {
-	TotalHit uint64
+	TotalHit int
 	//time in ms
 	Time float64
 	Hits []Hit
@@ -29,7 +28,9 @@ type Result struct {
 
 
 
-func Search(keyword string) *Result {
+
+
+func Query(keyword string) *Result {
 
 	index, err := openIndex()
 	if err != nil {
@@ -49,15 +50,7 @@ func Search(keyword string) *Result {
 		return nil
 	}
 
-
-	result :=  newResult(searchResults)
-
-	jsonByte, err := json.Marshal(result)
-
-
-	log.Printf("result: %v", string(jsonByte))
-
-	return result
+	return newResult(searchResults)
 }
 
 
@@ -81,11 +74,11 @@ func openIndex() (bleve.Index,  error)  {
 func newResult(searchResult *bleve.SearchResult) *Result {
 
 	result := &Result{
-		TotalHit: searchResult.Total,
 		Time: float64(searchResult.Took) / float64(time.Millisecond),
 	}
 	for _, searchResultHit := range searchResult.Hits {
 		result.Hits = append(result.Hits, *newHit(searchResultHit))
+		result.TotalHit = len(result.Hits)
 	}
 
 	return result
