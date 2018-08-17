@@ -1,13 +1,11 @@
 
 # sites to crawl
 entryPoint:
-- http://www.thaiunion.com
-- http://www.minor.com
-- http://www.indoramaventures.com
+- https://en.wikipedia.org/wiki/Main_Page
 
 
 # max depth for crawler to follow
-maxDepth: 3
+maxDepth: 2
 
 # max worker
 parallelism: 1
