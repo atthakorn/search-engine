@@ -87,7 +87,7 @@ $ go run cmd/crawl/main.go
 Once, crawl complete, the scraped data will be kept at `./data/crawl/*.json`
 
 
-Now you can index crawl data by issuing following command
+Now you can index crawler's scraped data by issuing following command
 
 ```shell
 $ go run cmd/index/main.go
