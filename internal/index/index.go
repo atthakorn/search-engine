@@ -1,14 +1,14 @@
 package index
 
 import (
-	"github.com/atthakorn/web-scraper/internal/config"
+	"github.com/atthakorn/search-engine/internal/config"
 	"github.com/blevesearch/bleve"
 	"log"
 	"github.com/blevesearch/bleve/mapping"
-	"github.com/atthakorn/web-scraper/internal/blevex/lang/th"
+	"github.com/atthakorn/search-engine/internal/blevex/lang/th"
 	"io/ioutil"
 	"path/filepath"
-	"github.com/atthakorn/web-scraper/internal/crawler"
+	"github.com/atthakorn/search-engine/internal/crawler"
 
 	"strings"
 	"time"

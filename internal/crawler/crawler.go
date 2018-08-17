@@ -10,7 +10,7 @@ import (
 	"time"
 	"sync"
 	"github.com/gocolly/colly"
-	"github.com/atthakorn/web-scraper/internal/config"
+	"github.com/atthakorn/search-engine/internal/config"
 	"os"
 )
 

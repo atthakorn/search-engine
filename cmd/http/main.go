@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 	"github.com/labstack/gommon/log"
-	"github.com/atthakorn/web-scraper/internal/web"
-	"github.com/atthakorn/web-scraper/internal/config"
+	"github.com/atthakorn/search-engine/internal/web"
+	"github.com/atthakorn/search-engine/internal/config"
 )
 
 

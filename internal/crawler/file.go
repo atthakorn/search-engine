@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"log"
-	"github.com/atthakorn/web-scraper/internal/config"
+	"github.com/atthakorn/search-engine/internal/config"
 )
 
 

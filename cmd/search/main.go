@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"log"
-	"github.com/atthakorn/web-scraper/internal/search"
+	"github.com/atthakorn/search-engine/internal/search"
 	"encoding/json"
 )
 

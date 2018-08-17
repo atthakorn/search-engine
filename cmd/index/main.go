@@ -1,6 +1,6 @@
 package main
 
-import "github.com/atthakorn/web-scraper/internal/index"
+import "github.com/atthakorn/search-engine/internal/index"
 
 func main()  {
 

@@ -3,9 +3,9 @@ package search
 import (
 	"github.com/blevesearch/bleve"
 	"log"
-	"github.com/atthakorn/web-scraper/internal/config"
+	"github.com/atthakorn/search-engine/internal/config"
 
-	_ "github.com/atthakorn/web-scraper/internal/blevex/lang/th"
+	_ "github.com/atthakorn/search-engine/internal/blevex/lang/th"
 	"github.com/blevesearch/bleve/search"
 	"time"
 	"net/url"

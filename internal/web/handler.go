@@ -3,7 +3,7 @@ package web
 import (
 	"net/http"
 	"html/template"
-	"github.com/atthakorn/web-scraper/internal/search"
+	"github.com/atthakorn/search-engine/internal/search"
 )
 
 type ViewModel struct {
