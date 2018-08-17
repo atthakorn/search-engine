@@ -42,7 +42,8 @@ func Query(keyword string) *Result {
 	query := bleve.NewFuzzyQuery(keyword)
 	request := bleve.NewSearchRequest(query)
 	request.Highlight = bleve.NewHighlight()
-	request.Fields = []string{"Title", "URL", "Body"}
+	request.Fields = []string{"*"}
+	request.Size = 10 // unlimited
 
 	searchResults, err := index.Search(request)
 	if err != nil {
@@ -96,15 +97,15 @@ func newHit(searchResultHit *search.DocumentMatch) *Hit {
 
 	//if fragment version existed, replace with fragment value
 	fragments := searchResultHit.Fragments
-	if fragments["Tittle"] != nil {
-		hit.Title = fragments["Tittle"][0]
+	if fragments["Title"] != nil {
+		hit.Title = fragments["Title"][0]
 	}
 	if fragments["Body"] != nil {
 		hit.Description = fragments["Body"][0]
 	}
-	if fragments["URL"] != nil {
+/*	if fragments["URL"] != nil {
 		hit.URL = fragments["URL"][0]
-	}
+	}*/
 
 	return hit
 }
