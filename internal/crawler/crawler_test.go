@@ -24,7 +24,7 @@ func TestLoadConfig(t *testing.T) {
 
 func TestValidatePageUrl(t *testing.T) {
 
-	crawler := Make()
+	crawler := New()
 
 	url := "http://www.domain.com/en"
 	assert.True(t, !crawler.isBlacklist(url), "This should be valid website url")
@@ -61,7 +61,7 @@ func TestValidatePageUrl(t *testing.T) {
 
 func TestValidateFileUrl(t *testing.T) {
 
-	crawler := Make()
+	crawler := New()
 
 	url := "http://www.domain.com/file.pdf"
 	assert.True(t, crawler.isBlacklist(url), "This should be url endpoint point to file")

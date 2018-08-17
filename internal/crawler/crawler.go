@@ -25,7 +25,7 @@ type Crawler struct {
 	mutexLock	sync.Mutex
 }
 
-func Make() *Crawler {
+func New() *Crawler {
 
 	crawler := &Crawler{
 		entryPoints: config.EntryPoints,

@@ -19,7 +19,7 @@ import (
 
 func Index() {
 
-	index := createIndex()
+	index := newIndex()
 	defer index.Close()
 
 	benchmark := benchmark(index, indexing)
@@ -29,21 +29,6 @@ func Index() {
 
 
 
-
-
-func Query(index bleve.Index) {
-
-	//query
-	query := bleve.NewFuzzyQuery("Information")
-	search := bleve.NewSearchRequest(query)
-	searchResults, err := index.Search(search)
-	if err != nil {
-		log.Printf("Search error: %v", err)
-		return
-	}
-	log.Printf("Result: %s", searchResults)
-
-}
 
 
 func setupDataDirectory() {
@@ -56,7 +41,8 @@ func setupDataDirectory() {
 }
 
 
-func createIndex() bleve.Index {
+
+func newIndex() bleve.Index {
 
 	setupDataDirectory()
 

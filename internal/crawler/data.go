@@ -16,19 +16,21 @@ type Data struct {
 
 
 
+// Marshal []Data to json string
 func Marshal(data []Data) string {
 
-	b, err := json.Marshal(data)
+	jsonBytes, err := json.Marshal(data)
 
 	if err != nil {
 		log.Printf("Unable to convert %v to json", data)
 		return ""
 	}
 
-	return string(b)
+	return string(jsonBytes)
 }
 
 
+// Unmarshal json string to *Data[]
 func Unmarshal(s string, datas *[]Data) error {
 	err := json.Unmarshal([]byte(s), datas)
 	if err != nil {
