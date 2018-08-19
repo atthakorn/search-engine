@@ -7,12 +7,12 @@
 This is experimental project baked with [go-colly](https://github.com/gocolly/colly) and  [blevesearch](https://github.com/blevesearch) to build search engine in `Go`.  
 
 
-### Prerequisite
+## Prerequisite
 
 To use package in [blevex](https://github.com/blevesearch/blevex) (blevesearch's extension), 
 it is required to install C dependency as following steps.
 
-*This is verified against `Debian GNU/Linux 8.11 (jessie)*
+*This is verified against Debian GNU/Linux 8.11 (jessie)*
 
 ```shell
 $ sudo apt-get install libleveldb-dev libstemmer-dev libicu-dev build-essential
@@ -32,7 +32,7 @@ $ sudo apt-get install libicu-dev
 ```   
 
 
-### Installation
+## Installation
 
 Use `git clone` or `go get` to download project to your go workspace in `$GOPATH` then run `dep ensure` to initialise project.
 
@@ -43,7 +43,7 @@ $ cd $GOPATH/src/github.com/atthakorn/search-engine
 $ dep ensure
 ```
 
-### Config
+## Config
 
 Here is the list of parameter you can find in `.config.yml`
 
@@ -65,7 +65,7 @@ parallelism: 1
 delay: 1
 
 
-# path to store data scraped data from crawler
+# path to store scraped data from crawler
 dataPath: "data/crawl"
 
 # path to store indexed data
@@ -76,7 +76,7 @@ indexPath: "data/index"
 httpAddress: ":8080"
 ```
 
-### Crawling & Indexing
+## Crawling & Indexing
 
 To crawling websites, just `cd` to project root and run
 
@@ -96,7 +96,7 @@ $ go run cmd/index/main.go
 The data will be indexed by boltdb, the file will be located at `./data/index/*`
 
 
-### Starting Up Http Server
+## Start Server
  
  Search Engine comes with `simple search application`  , you can start http server by following command
  
@@ -105,3 +105,7 @@ $ go run cmd/http/main.go
 ```
 
 and you can open application via browser at `http://localhost:8080`
+
+
+## License
+This project is licensed under [MIT License](https://github.com/atthakorn/search-engine/blob/master/LICENSE.md)
